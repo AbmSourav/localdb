@@ -1,12 +1,12 @@
 const fs = require( 'fs' );
-const {coreModules} = require( './src/core' );
+const {chunk} = require( './src/chunk' );
 
 
 const localDB = function() {
 	const crud = {}
 
 	crud.get = () => {
-		const getData = fs.readFileSync( coreModules.file, 'utf8' );
+		const getData = fs.readFileSync( chunk.file, 'utf8' );
 		if (getData.length == 0) return undefined;
 		return getData;
 	}
@@ -17,14 +17,14 @@ const localDB = function() {
 			oldData = JSON.parse( oldData );
 		} else oldData = [];
 		
-		if (coreModules.errorCheck(newData).status) return coreModules.errorCheck.message;
+		if (chunk.errorCheck(newData).status) return chunk.errorCheck.message;
 		oldData.push( newData );
 		
-		coreModules.writeFile(oldData);
+		chunk.writeFile(oldData);
 	}
 
 	crud.del = (item = undefined) => {
-		if (coreModules.errorCheck(item).status) return coreModules.errorCheck.message;
+		if (chunk.errorCheck(item).status) return chunk.errorCheck.message;
 
 		const itemKey = Object.keys(item);
 
@@ -39,7 +39,6 @@ const localDB = function() {
 		const match = [];
 		getAllData.filter(function(getItem) {
 			if (getItem[itemKey[0]] == undefined) return notFound.push("Not found in LocalDB...");
-			// console.log(getItem[itemKey[0]]);
 
 			if ( getItem[itemKey[0]] != undefined ) {
 				if ( getItem[itemKey[0]] == item[itemKey[0]] ) {
@@ -54,7 +53,7 @@ const localDB = function() {
 
 		if (notFound.length != 0)  return console.log(notFound[0]);
 		if (match.length != 0) {
-			coreModules.writeFile(dataMap);
+			chunk.writeFile(dataMap);
 		} else console.error("Not found in LocalDB...");
 	}
 
