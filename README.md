@@ -10,7 +10,7 @@ LocalDB is a NodeJS CRUD API. It uses local file system for CRUD operation. It's
 
 **POST** `localDB.addNew(jsonObject)`
 
-**UPDATE** `localDB.update(jsonObject)`
+**UPDATE** `localDB.update(jsonObject, newValue)`
 
 **DELETE** `localDB.del(jsonObject)`
 
@@ -33,7 +33,7 @@ db.get()
 	.catch( (err) => console.log(err) );
 
 // update data
-db.update({name: "Sourav"}, "Abm Sourav")
+db.update({name: "Sourav"}, "Abm Sourav") // args: 1.where update'll made, 2.new value
 	.catch( err => console.log(err) );
 
 // Delete data
