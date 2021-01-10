@@ -4,15 +4,14 @@ const fs = require( 'fs' );
 const localDbChunk = {
 	file: path.resolve(path.dirname(__dirname), './localdb.json'),
 
-	writeFile: (data) => {
-		fs.writeFile(
-			localDbChunk.file,
-			JSON.stringify(data, null, 2),
-			(err) => {
-				if (err) throw console.error(err);
-				console.log("Done");
-			}
-		);
+	getData: () => {
+		const getData = fs.readFileSync( localDbChunk.file, 'utf8' );
+		if (getData.length == 0) return undefined;
+		return getData;
+	},
+
+	writeFile: async (data) => {
+		await fs.promises.writeFile(localDbChunk.file, JSON.stringify(data, null, 2));
 	},
 
 	errorCheck: (data) => {

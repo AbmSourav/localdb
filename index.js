@@ -5,14 +5,12 @@ const {localDbChunk} = require( './src/localDbChunk' );
 const localDB = function() {
 	const crud = {}
 
-	crud.get = () => {
-		const getData = fs.readFileSync( localDbChunk.file, 'utf8' );
-		if (getData.length == 0) return undefined;
-		return getData;
+	crud.get = async () => {
+		return await fs.promises.readFile(localDbChunk.file, 'utf8');
 	}
 
-	crud.addNew = (newData = []) => {
-		let oldData = crud.get();
+	crud.addNew = async (newData = []) => {
+		let oldData = await localDbChunk.getData();
 		if (oldData != undefined) {
 			oldData = JSON.parse( oldData );
 		} else oldData = [];
@@ -20,15 +18,15 @@ const localDB = function() {
 		if (localDbChunk.errorCheck(newData).status) return localDbChunk.errorCheck.message;
 		oldData.push( newData );
 		
-		localDbChunk.writeFile(oldData);
+		await localDbChunk.writeFile(oldData).catch(err => err);
 	}
 
-	crud.del = (item = undefined) => {
+	crud.del = async (item = undefined) => {
 		if (localDbChunk.errorCheck(item).status) return localDbChunk.errorCheck.message;
 
 		const itemKey = Object.keys(item);
 
-		let getAllData = crud.get();
+		let getAllData = await localDbChunk.getData();
 		if (getAllData == undefined) {
 			return console.error("LocalDB is empty...");
 		}
@@ -53,16 +51,16 @@ const localDB = function() {
 
 		if (notFound.length != 0)  return console.log(notFound[0]);
 		if (match.length != 0) {
-			localDbChunk.writeFile(dataMap);
+			await localDbChunk.writeFile(dataMap).catch(err => err);
 		} else console.error("Not found in LocalDB...");
 	}
 
-	crud.update = (item = undefined, newData = undefined) => {
+	crud.update = async (item = undefined, newData = undefined) => {
 		if (localDbChunk.errorCheck(item).status) return localDbChunk.errorCheck.message;
 
 		const itemKey = Object.keys(item);
 
-		let getAllData = crud.get();
+		let getAllData = localDbChunk.getData();
 		if (getAllData == undefined) {
 			return console.error("LocalDB is empty...");
 		}
@@ -85,7 +83,7 @@ const localDB = function() {
 
 		if (notFound.length != 0) return console.error(notFound[0]);
 		if (match.length != 0) {
-			return localDbChunk.writeFile(dataMap);
+			return await localDbChunk.writeFile(dataMap);
 		} else return console.error("Not found in LocalDB...");
 	}
 

@@ -1,4 +1,4 @@
-# localdb
+# LocalDB
 LocalDB is a NodeJS CRUD api. It uses local file system for CRUD operation.
 
 <br>
@@ -21,8 +21,22 @@ LocalDB is a NodeJS CRUD api. It uses local file system for CRUD operation.
 const {localDB} = require('@abmsourav/localdb');
 const db = localDB();
 
-db.addNew({"name": "Sourav"})
-console.log(db.get())
-db.update({"name": "Abm Sourav" })
-db.del({"name": "Abm Sourav"})
+const data = {names: "Sourav", email: "keramotul.islam@gmail.com"};
+
+// add new data
+ldb.addNew(data)
+	.catch( (err) => console.log(err) );
+
+// get data from localDB
+ldb.get()
+	.then( (data) => console.log(data) ) // [ {name: 'Sourav', email: 'keramotul.islam@gmail.com'} ]
+	.catch( (err) => console.log(err) );
+
+// update data
+ldb.update({name: "Sourav"}, "Abm Sourav")
+	.catch( err => console.log(err) );
+
+// Delete data
+ldb.del({name: "Abm Sourav"})
+	.catch( err => console.log(err) );
 ```
