@@ -1,17 +1,17 @@
 {
   "name": "@abmsourav/localdb",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "LocalDB is a NodeJS CRUD api. It uses local file system for CRUD operation.",
   "author": "Keramot UL Islam <keramotul.islam@gmail.com> (https://abmsourav.com)",
   "main": "index.js",
   "scripts": {
-	"start": "node index.js",
+    "start": "node index.js",
     "test": "node test.js"
   },
   "license": "MIT",
   "repository": {
-	"type" : "git",
-	"url" : "https://github.com/AbmSourav/localdb/"
+    "type": "git",
+    "url": "https://github.com/AbmSourav/localdb/"
   },
   "bugs": {
     "url": "https://github.com/AbmSourav/localdb/issues"
