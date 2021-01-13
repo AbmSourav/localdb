@@ -1,20 +1,20 @@
-const {localDB} = require("./index");
+// const {localDB} = require("./index");
 // const {localDbChunk} = require( './src/localDbChunk' );
 
-const ldb = localDB();
+// const ldb = localDB();
 
 // const data = {name: "Sourav", email: "keramotul.islam@gmail.com"};
 
 // setTimeout(function() {
-// 	ldb.addNew(data)
-// 		.catch( (err) => console.log(err) );
+	// ldb.set(data)
+	// 	.catch( (err) => console.log(err) );
 // }, 500)
 
 // ldb.get()
 // 	.then( (data) => console.log(data) )
 // 	.catch( (err) => console.log(err) );
 
-// ldb.del({name: "Keramot UL Islam"})
+// ldb.remove({name: "Sourav"})
 // 	.catch( err => console.log(err) );
 
-ldb.update({name: "Sourav"}, "Abm Sourav")
+// ldb.update({name: "Sourav"}, "Abm Sourav")

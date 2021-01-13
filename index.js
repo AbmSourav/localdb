@@ -9,7 +9,7 @@ const localDB = function() {
 		return await fs.promises.readFile(localDbChunk.file, 'utf8');
 	}
 
-	crud.addNew = async (newData = []) => {
+	crud.set = async (newData = []) => {
 		let oldData = await localDbChunk.getData();
 		if (oldData != undefined) {
 			oldData = JSON.parse( oldData );
@@ -21,7 +21,7 @@ const localDB = function() {
 		await localDbChunk.writeFile(oldData).catch(err => err);
 	}
 
-	crud.del = async (item = undefined) => {
+	crud.remove = async (item = undefined) => {
 		if (localDbChunk.errorCheck(item).status) return localDbChunk.errorCheck.message;
 
 		const itemKey = Object.keys(item);

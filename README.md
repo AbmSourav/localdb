@@ -1,42 +1,48 @@
 # LocalDB
-LocalDB is a NodeJS CRUD API. It uses local file system for CRUD operation. It's a promise based API.
+LocalDB is a NodeJS CRUD API. 
+It uses local file system for CRUD operation. It's a promise based API.
 
 <br>
+<br>
+
+## Installation
+`npm i @abmsourav/localdb`
+
 <br>
 
 ## API
 
 **GET** `localDB.get()`
 
-**POST** `localDB.addNew(jsonObject)`
+**POST** `localDB.set(jsonObject)`
 
 **UPDATE** `localDB.update(jsonObject, newValue)`
 
-**DELETE** `localDB.del(jsonObject)`
+**DELETE** `localDB.remove(jsonObject)`
 
 <br>
 
 ## Uses
 ```js
 const {localDB} = require('@abmsourav/localdb');
-const db = localDB();
+const ldb = localDB();
 
 const data = {names: "Sourav", email: "keramotul.islam@gmail.com"};
 
 // add new data
-db.addNew(data)
+ldb.set(data)
 	.catch( (err) => console.log(err) );
 
 // get data from localDB
-db.get()
+ldb.get()
 	.then( (data) => console.log(data) ) // [ {name: 'Sourav', email: 'keramotul.islam@gmail.com'} ]
 	.catch( (err) => console.log(err) );
 
 // update data
-db.update({name: "Sourav"}, "Abm Sourav") // args: 1.where update'll made, 2.new value
+ldb.update({name: "Sourav"}, "Abm Sourav") // args: 1.where update'll made, 2.new value
 	.catch( err => console.log(err) );
 
 // Delete data
-db.del({name: "Abm Sourav"})
+ldb.remove({name: "Abm Sourav"})
 	.catch( err => console.log(err) );
 ```
