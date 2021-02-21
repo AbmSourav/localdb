@@ -1,12 +1,15 @@
 const fs = require( 'fs' );
+const path = require( 'path' );
 const {localDbChunk} = require( './src/localDbChunk' );
 
 
-const localDB = function() {
+const localDB = function(filePath = null) {
 	const crud = {}
 
+	let file = filePath == null ? path.join(__dirname, '/localdb.json') : filePath;
+
 	crud.get = async () => {
-		return await fs.promises.readFile(localDbChunk.file, 'utf8');
+		return await fs.promises.readFile(file, 'utf8');
 	}
 
 	crud.set = async (newData = []) => {
@@ -15,17 +18,16 @@ const localDB = function() {
 
             crud.get()
                 .then( (data) => {
-
-                    if (data == undefined) {
+					if (data.length == 0 || data.length == 1 || data.length == 2) {
                         data = [];
-                        data.push(newData);
-                        resolve(localDbChunk.writeFile(data));
+						data.push(newData);
+                        resolve(localDbChunk.writeFile(data, file));
                     } else if (typeof JSON.parse(data) === "string") {
                         reject("LocalDB don't have a valid Json data type, remove all invalid data first.");
                     } else {
                         let parsedData = JSON.parse(data);
                         parsedData.push(newData);
-                        resolve(localDbChunk.writeFile(parsedData));
+                        resolve(localDbChunk.writeFile(parsedData, file));
                     }
                 } )
                 .catch(error => reject(error));
@@ -65,7 +67,7 @@ const localDB = function() {
     
                     if (notFound.length == getAllData.length)  return reject(notFound[0]);
                     if (match.length != 0) {
-                        resolve(localDbChunk.writeFile(dataMap) );
+                        resolve(localDbChunk.writeFile(dataMap, file) );
                     } else reject("Not found in LocalDB...");
                 } )
                 .catch(error => reject(error));
@@ -102,7 +104,7 @@ const localDB = function() {
     
                     if (notFound.length == getAllData.length) return reject(notFound[0]);
                     if (match.length != 0) {
-                        resolve(localDbChunk.writeFile(dataMap));
+                        resolve(localDbChunk.writeFile(dataMap, file));
                     } else reject("Not found in LocalDB...");
                 } )
                 .catch(error => reject(error));

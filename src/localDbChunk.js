@@ -2,20 +2,10 @@ const path = require( 'path' );
 const fs = require( 'fs' );
 
 const localDbChunk = {
-	file: path.resolve(path.dirname(__dirname), './localdb.json'),
+	writeFile: async (data, filePath = null) => {
+		const file = filePath == null ? path.resolve(path.dirname(__dirname), './localdb.json') : filePath;
 
-	getData: () => {
-		return new Promise((resolve, reject) => {
-            let data = '';
-            fs.createReadStream(localDbChunk.file)
-                .on('data', (chunk) =>  data += chunk)
-                .on('end', () => resolve(data))
-                .on('error', error => reject(error));
-        });
-	},
-
-	writeFile: async (data) => {
-        const writeStream = fs.createWriteStream(localDbChunk.file);
+        const writeStream = fs.createWriteStream(file);
         
         writeStream
             .on('error', (error) => {

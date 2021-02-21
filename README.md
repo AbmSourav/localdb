@@ -23,6 +23,7 @@ It uses local file system for CRUD operation. It's a promise based API.
 <br>
 
 ## Uses
+
 ```js
 const {localDB} = require('@abmsourav/localdb');
 const ldb = localDB();
@@ -45,6 +46,14 @@ ldb.update({name: "Sourav"}, "Abm Sourav") // args: 1. where update'll made, 2. 
 // Delete data
 ldb.remove({name: "Abm Sourav"})
 	.catch( err => console.log(err) );
+```
+
+<br>
+
+### You can also add your own db file
+Please note: It must be a json file.
+```js
+const ldb = localDB('./db.json');
 ```
 
 <br>

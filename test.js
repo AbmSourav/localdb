@@ -1,7 +1,7 @@
 const fs = require( 'fs' );
 const {localDB} = require("./index");
 
-// const ldb = localDB();
+const ldb = localDB('./test.json');
 
 // ldb.update( {"name": "Abm Sourav"}, "ABM Sourav" );
 
@@ -12,6 +12,4 @@ const {localDB} = require("./index");
 // ldb.set({"email": "keramotul.islam@gmail.com"})
 // 	.then(() => ldb.update({"greetings": "Hello Universe"}, "Hello World"))
 // 	.then( () =>  ldb.remove({"name": "ABM Sourav"}))
-// 	.then( () =>  ldb.get().then(data => console.log(data)));
-
-// ldb.update({"greetings": "Hello World"}, "Hello Universe")
+// .then( () =>  ldb.get().then(data => console.log(data)));
