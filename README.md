@@ -39,10 +39,25 @@ ldb.get()
 	.catch( (err) => console.log(err) );
 
 // update data
-ldb.update({name: "Sourav"}, "Abm Sourav") // args: 1.where update'll made, 2.new value
+ldb.update({name: "Sourav"}, "Abm Sourav") // args: 1. where update'll made, 2. new value
 	.catch( err => console.log(err) );
 
 // Delete data
 ldb.remove({name: "Abm Sourav"})
 	.catch( err => console.log(err) );
+```
+
+<br>
+
+### Promise Supports
+```js
+ldb.set({"email": "keramotul.islam@gmail.com"})
+	.then(() => ldb.update({"greetings": "Hello World"}, "Hello Universe"))
+	.then( () =>  ldb.remove({"name": "ABM Sourav"}))
+	.then( () =>  ldb.get().then(data => console.log(data)));
+
+
+ldb.update({"name": "Sourav"}, "Abm Sourav")
+	.then(() => ldb.remove({"greetings": "Hello Universe"}))
+
 ```

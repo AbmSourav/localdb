@@ -5,13 +5,23 @@ const localDbChunk = {
 	file: path.resolve(path.dirname(__dirname), './localdb.json'),
 
 	getData: () => {
-		const getData = fs.readFileSync( localDbChunk.file, 'utf8' );
-		if (getData.length == 0) return undefined;
-		return getData;
+		return new Promise((resolve, reject) => {
+            let data = '';
+            fs.createReadStream(localDbChunk.file)
+                .on('data', (chunk) =>  data += chunk)
+                .on('end', () => resolve(data))
+                .on('error', error => reject(error));
+        });
 	},
 
 	writeFile: async (data) => {
-		await fs.promises.writeFile(localDbChunk.file, JSON.stringify(data, null, 2));
+        const writeStream = fs.createWriteStream(localDbChunk.file);
+        
+        writeStream
+            .on('error', (error) => {
+                console.log(error);
+            })
+            .write(JSON.stringify(data, null, 4));
 	},
 
 	errorCheck: (data) => {
