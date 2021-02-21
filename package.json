@@ -15,5 +15,12 @@
   },
   "bugs": {
     "url": "https://github.com/AbmSourav/localdb/issues"
-  }
+  },
+  "keywords": [
+    "localdb",
+    "database",
+    "local-storage",
+    "promise",
+    "async"
+  ]
 }
