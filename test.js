@@ -1,9 +1,9 @@
-// const {localDB} = require("./index");
+const {localDB} = require("./index");
 // const {localDbChunk} = require( './src/localDbChunk' );
 
-// const ldb = localDB();
+const ldb = localDB();
 
-// const data = {name: "Sourav", email: "keramotul.islam@gmail.com"};
+const data = {name: "Sourav", email: "keramotul.islam@gmail.com"};
 
 // setTimeout(function() {
 	// ldb.set(data)
@@ -17,4 +17,8 @@
 // ldb.remove({name: "Sourav"})
 // 	.catch( err => console.log(err) );
 
-// ldb.update({name: "Sourav"}, "Abm Sourav")
+ldb.update({age: 31}, 29)
+
+// ldb.search("name", "Sourav").then( data => console.log(data) );
+
+// ldb.searchByValue("Sourav").then( data => console.log(data) );

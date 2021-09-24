@@ -1,5 +1,8 @@
 const fs = require( 'fs' );
+const { searchByValue } = require('./src/resource/searchByValue');
 const {localDbChunk} = require( './src/localDbChunk' );
+const { search } = require('./src/resource/search');
+const { update } = require('./src/resource/update');
 
 
 const localDB = function() {
@@ -56,35 +59,27 @@ const localDB = function() {
 	}
 
 	crud.update = async (item = undefined, newData = undefined) => {
-		if (localDbChunk.errorCheck(item).status) return localDbChunk.errorCheck.message;
+		const result = await update(item, newData)
+			.then(function(data) { return data })
+			.catch(function(error) { return error });
 
-		const itemKey = Object.keys(item);
+		return result
+	}
 
-		let getAllData = localDbChunk.getData();
-		if (getAllData == undefined) {
-			return console.error("LocalDB is empty...");
-		}
-		getAllData = JSON.parse( getAllData );
+	crud.search = async (key, value, unique = true) => {
+		const result = search(key, value, unique)
+			.then(function(data) { return data })
+			.catch(function(error) { return error });
 
-		const notFound = [];
-		const dataMap = [];
-		const match = [];
-		getAllData.filter(function(getItem) {
-			if (getItem[itemKey[0]] == undefined) return notFound.push("Not found in LocalDB...");
+		return result
+	}
 
-			if ( getItem[itemKey[0]] != undefined ) {
-				if ( getItem[itemKey[0]] == item[itemKey[0]] ) {
-					match.push(getItem);
-					getItem[itemKey[0]] = newData;
-				}
-			}
-			return dataMap.push(getItem);
-		})
+	crud.searchByValue = async (value, unique = false) => {
+		const result = await searchByValue(value, unique)
+			.then(function(data) { return data })
+			.catch(function(error) { return error });
 
-		if (notFound.length != 0) return console.error(notFound[0]);
-		if (match.length != 0) {
-			return await localDbChunk.writeFile(dataMap);
-		} else return console.error("Not found in LocalDB...");
+		return result
 	}
 
 
