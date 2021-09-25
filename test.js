@@ -3,7 +3,7 @@ const {localDB} = require("./index");
 
 const ldb = localDB();
 
-const data = {name: "Sourav", email: "keramotul.islam@gmail.com"};
+const data = {name: "Keramot UL Islam", email: "keramotul.islam@gmail.com"};
 
 // setTimeout(function() {
 	// ldb.set(data)
@@ -14,11 +14,13 @@ const data = {name: "Sourav", email: "keramotul.islam@gmail.com"};
 // 	.then( (data) => console.log(data) )
 // 	.catch( (err) => console.log(err) );
 
-ldb.remove({"id": "abm"})
-	.catch( err => console.log(err) );
+// ldb.remove({"id": "abm"})
+// 	.catch( err => console.log(err) );
 
 // ldb.update({"id": "abm"}, {name: "AbmSourav"}).catch(error => console.log(error));
 
-// ldb.search("name", "Sourav").then( data => console.log(data) );
+ldb.search("name", "Sourav").then( data => console.log(data) );
 
 // ldb.searchByValue("Sourav").then( data => console.log(data) );
+
+ldb.insert({"id": "abm"}, {"Full Name": "Keramot UL Islam"})
