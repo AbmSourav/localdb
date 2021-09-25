@@ -1,10 +1,11 @@
 const { localDbChunk } = require("../localDbChunk");
 
-async function update(item, newData) {
-	if (localDbChunk.errorCheck(item).status) return localDbChunk.errorCheck.message;
+async function update(find, newData) {
+	if (localDbChunk.errorCheck(find).status) return localDbChunk.errorCheck.message;
+	if (localDbChunk.errorCheck(newData).status) return localDbChunk.errorCheck.message;
 
-	const itemKey = Object.keys(item);
-	// console.log(itemKey[0])
+	const itemKey = Object.keys(find);
+	const newDataKey = Object.keys(newData);
 
 	let getAllData = localDbChunk.getData();
 	if (getAllData == undefined) {
@@ -19,9 +20,11 @@ async function update(item, newData) {
 		if (getItem[itemKey[0]] === undefined) notFound.push("Not found in LocalDB...");
 
 		if ( getItem[itemKey[0]] != undefined ) {
-			if ( getItem[itemKey[0]] == item[itemKey[0]] ) {
-				match.push(getItem);
-				getItem[itemKey[0]] = newData;
+			if ( getItem[itemKey[0]] === find[itemKey[0]] ) {
+				if (getItem[newDataKey[0]] != undefined ) {
+					match.push(getItem);
+					getItem[newDataKey[0]] = newData[newDataKey[0]];
+				}
 			}
 		}
 		dataMap.push(getItem);

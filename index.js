@@ -58,8 +58,16 @@ const localDB = function() {
 		} else console.error("Not found in LocalDB...");
 	}
 
-	crud.update = async (item = undefined, newData = undefined) => {
-		const result = await update(item, newData)
+	/**
+	 * Update operation for DB
+	 * 
+	 * @param {object} find - Identify the object
+	 * @param {object} newData - property that need to be change and it's new value
+	 * 
+	 * @returns void
+	 */
+	crud.update = async (find, newData) => {
+		const result = await update(find, newData)
 			.then(function(data) { return data })
 			.catch(function(error) { return error });
 

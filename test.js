@@ -17,7 +17,7 @@ const data = {name: "Sourav", email: "keramotul.islam@gmail.com"};
 // ldb.remove({name: "Sourav"})
 // 	.catch( err => console.log(err) );
 
-ldb.update({age: 31}, 29)
+ldb.update({"id": "abm"}, {name: "AbmSourav"}).catch(error => console.log(error));
 
 // ldb.search("name", "Sourav").then( data => console.log(data) );
 
