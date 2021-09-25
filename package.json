@@ -9,14 +9,18 @@
     "test": "node test.js"
   },
   "license": "MIT",
-  "keywords": [
-	"localDB", "Database", "promise", "async", "crud"
-  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/AbmSourav/localdb/"
   },
   "bugs": {
     "url": "https://github.com/AbmSourav/localdb/issues"
-  }
+  },
+  "keywords": [
+    "localdb",
+    "database",
+    "local-storage",
+    "promise",
+    "async"
+  ]
 }

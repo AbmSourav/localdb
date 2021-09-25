@@ -82,3 +82,7 @@ ldb.searchByValue("Abm Sourav", true)
 	.then( data => console.log(data) );
 
 ```
+
+<br>
+
+.

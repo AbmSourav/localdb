@@ -3,16 +3,14 @@ const {localDB} = require("./index");
 
 // const ldb = localDB("./db.json");
 
-// const data = {name: "Sourav", email: "keramotul.islam@gmail.com"};
+// ldb.update( {"name": "Abm Sourav"}, "ABM Sourav" );
 
 // // setTimeout(function() {
 	// ldb.set(data)
 	// 	.catch( (err) => console.log(err) );
 // }, 500)
 
-// ldb.get()
-// 	.then( (data) => console.log(data) )
-// 	.catch( (err) => console.log(err) );
+// ldb.remove({name: "ABM Sourav.."});
 
 // ldb.remove({name: "Keramot UL Islam"})
 // 	.catch( err => console.log(err) );
