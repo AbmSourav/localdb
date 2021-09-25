@@ -3,6 +3,7 @@ const { searchByValue } = require('./src/resource/searchByValue');
 const {localDbChunk} = require( './src/localDbChunk' );
 const { search } = require('./src/resource/search');
 const { update } = require('./src/resource/update');
+const { remove } = require('./src/resource/remove');
 
 
 const localDB = function() {
@@ -24,42 +25,23 @@ const localDB = function() {
 		await localDbChunk.writeFile(oldData).catch(err => err);
 	}
 
-	crud.remove = async (item = undefined) => {
-		if (localDbChunk.errorCheck(item).status) return localDbChunk.errorCheck.message;
+	/**
+	 * Remove data from DB
+	 * 
+	 * @param {object} item - Identify the object with key-value pair
+	 * 
+	 * @returns void
+	 */
+	crud.remove = async (item) => {
+		const result = await remove(item)
+			.then(function(data) { return data })
+			.catch(function(error) { return error });
 
-		const itemKey = Object.keys(item);
-
-		let getAllData = await localDbChunk.getData();
-		if (getAllData == undefined) {
-			return console.error("LocalDB is empty...");
-		}
-		getAllData = JSON.parse( getAllData );
-
-		const notFound = [];
-		const dataMap = [];
-		const match = [];
-		getAllData.filter(function(getItem) {
-			if (getItem[itemKey[0]] == undefined) return notFound.push("Not found in LocalDB...");
-
-			if ( getItem[itemKey[0]] != undefined ) {
-				if ( getItem[itemKey[0]] == item[itemKey[0]] ) {
-					match.push(getItem);
-				}
-
-				if (getItem[itemKey[0]] != item[itemKey[0]]) {
-					dataMap.push(getItem);
-				}
-			}
-		})
-
-		if (notFound.length != 0)  return console.log(notFound[0]);
-		if (match.length != 0) {
-			await localDbChunk.writeFile(dataMap).catch(err => err);
-		} else console.error("Not found in LocalDB...");
+		return result
 	}
 
 	/**
-	 * Update operation for DB
+	 * Update data on DB
 	 * 
 	 * @param {object} find - Identify the object
 	 * @param {object} newData - property that need to be change and it's new value

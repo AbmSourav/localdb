@@ -14,10 +14,10 @@ const data = {name: "Sourav", email: "keramotul.islam@gmail.com"};
 // 	.then( (data) => console.log(data) )
 // 	.catch( (err) => console.log(err) );
 
-// ldb.remove({name: "Sourav"})
-// 	.catch( err => console.log(err) );
+ldb.remove({"id": "abm"})
+	.catch( err => console.log(err) );
 
-ldb.update({"id": "abm"}, {name: "AbmSourav"}).catch(error => console.log(error));
+// ldb.update({"id": "abm"}, {name: "AbmSourav"}).catch(error => console.log(error));
 
 // ldb.search("name", "Sourav").then( data => console.log(data) );
 

@@ -32,7 +32,7 @@ async function update(find, newData) {
 
 	if (notFound.length != 0 && match.length === 0) return console.error(notFound[0]);
 	if (match.length != 0) {
-		return await localDbChunk.writeFile(dataMap);
+		return await localDbChunk.writeFile(dataMap).catch(function(error) { return error });
 	} else return console.error("Not found in LocalDB...");
 }
 
