@@ -15,16 +15,13 @@
 
 
 const fs = require( 'fs' );
-const { localDbChunk } = require( './src/localDbChunk' );
-const { set } = require('./src/resource/set');
-const { insert } = require('./src/resource/insert');
-const { update } = require('./src/resource/update');
-const { remove } = require('./src/resource/remove');
-const { search } = require('./src/resource/search');
-const { searchByValue } = require('./src/resource/searchByValue');
+const path = require( 'path' );
+const { localDbChunk } = require('./src/localDbChunk');
 
-const localDB = function() {
+const localDB = function(filePath = null) {
 	const crud = {}
+
+	let file = filePath === null ? path.join(__dirname, '/localdb.json') : filePath;
 
 	/**
 	 * Get all data fro DB
@@ -32,7 +29,7 @@ const localDB = function() {
 	 * @returns array
 	 */
 	crud.get = async () => {
-		return await fs.promises.readFile(localDbChunk.file, 'utf8');
+		return await fs.promises.readFile(file, 'utf8');
 	}
 
 	/**
@@ -42,12 +39,26 @@ const localDB = function() {
 	 * 
 	 * @returns void
 	 */
-	crud.set = async (newData) => {
-		const result = await set(newData)
-			.then(function(data) { return data })
-			.catch(function(error) { return error });
+	 crud.set = async (newData) => {
+		return new Promise((resolve, reject) => {
+            if (localDbChunk.errorCheck(newData).status) return reject(localDbChunk.errorCheck.message);
 
-		return result
+            crud.get()
+                .then( (data) => {
+					if (data.length == 0 || data.length == 1 || data.length == 2) {
+                        data = [];
+						data.push(newData);
+                        resolve(localDbChunk.writeFile(data, file));
+                    } else if (typeof JSON.parse(data) === "string") {
+                        reject("LocalDB don't have a valid Json data type, remove all invalid data first.");
+                    } else {
+                        let parsedData = JSON.parse(data);
+                        parsedData.push(newData);
+                        resolve(localDbChunk.writeFile(parsedData, file));
+                    }
+                } )
+                .catch(error => reject(error));
+        });
 	}
 
 	/**
@@ -58,12 +69,47 @@ const localDB = function() {
 	 * 
 	 * @returns void
 	 */
-	 crud.insert = async (find, newData) => {
-		const result = await insert(find, newData)
-			.then(function(data) { return data })
-			.catch(function(error) { return error });
+	crud.insert = async (find, newData) => {
+		return new Promise((resolve, reject) => {
+            if (localDbChunk.errorCheck(find).status) return localDbChunk.errorCheck.message;
+			if (localDbChunk.errorCheck(newData).status) return localDbChunk.errorCheck.message;
 
-		return result
+			const itemKey = Object.keys(find);
+			const newDataKey = Object.keys(newData);
+
+            crud.get()
+                .then( (data) => {
+					if (data.length == 0 || data.length == 1 || data.length == 2) {
+                        return reject("LocalDB is empty...");
+                    }
+                    getAllData = JSON.parse(data);
+
+					const notFound = [];
+					const dataMap = [];
+					const match = [];
+					getAllData.filter(function(getItem) {
+						if (getItem[itemKey[0]] === undefined) notFound.push("Not found in LocalDB...");
+
+						if ( getItem[itemKey[0]] != undefined ) {
+							if ( getItem[itemKey[0]] === find[itemKey[0]] ) {
+								if (getItem[newDataKey[0]] === undefined ) {
+									match.push(getItem);
+									getItem[newDataKey[0]] = newData[newDataKey[0]];
+								} else {
+									notFound.push("Data already exist in LocalDB...");
+								}
+							}
+						}
+						dataMap.push(getItem);
+					})
+
+					if (notFound.length != 0 && match.length === 0) return console.error(notFound[0]);
+					if (match.length != 0) {
+						resolve(localDbChunk.writeFile(dataMap, file) );
+					} else reject("Not found in LocalDB...");
+                } )
+                .catch(error => reject(error));
+        });
 	}
 
 	/**
@@ -74,11 +120,41 @@ const localDB = function() {
 	 * @returns void
 	 */
 	crud.remove = async (item) => {
-		const result = await remove(item)
-			.then(function(data) { return data })
-			.catch(function(error) { return error });
+		return new Promise((resolve, reject) => {
+            if (localDbChunk.errorCheck(item).status) return reject(localDbChunk.errorCheck.message);
 
-		return result
+            const itemKey = Object.keys(item);
+            crud.get()
+                .then( (data) => {
+                    if (data.length == 0 || data.length == 1 || data.length == 2) {
+                        return reject("LocalDB is empty...");
+                    }
+                    getAllData = JSON.parse(data);
+
+                    const notFound = [];
+                    const dataMap = [];
+                    const match = [];
+                    getAllData.filter(function(getItem) {
+                        if (getItem[itemKey[0]] == undefined) notFound.push("Not found in LocalDB...");
+    
+                        if ( getItem[itemKey[0]] != undefined ) {
+                            if ( getItem[itemKey[0]] == item[itemKey[0]] ) {
+                                match.push(getItem);
+                            } else {
+                                dataMap.push(getItem);
+                            }
+                        } else {
+                            dataMap.push(getItem);
+                        }
+                    })
+    
+                    if (notFound.length == getAllData.length)  return reject(notFound[0]);
+                    if (match.length != 0) {
+                        resolve(localDbChunk.writeFile(dataMap, file) );
+                    } else reject("Not found in LocalDB...");
+                } )
+                .catch(error => reject(error));
+        });
 	}
 
 	/**
@@ -89,12 +165,43 @@ const localDB = function() {
 	 * 
 	 * @returns void
 	 */
-	crud.update = async (find, newData) => {
-		const result = await update(find, newData)
-			.then(function(data) { return data })
-			.catch(function(error) { return error });
+	crud.update = async (item, newData) => {
+		return new Promise((resolve, reject) => {
+            if (localDbChunk.errorCheck(item).status) return reject(localDbChunk.errorCheck.message);
+			if (localDbChunk.errorCheck(newData).status) return reject(localDbChunk.errorCheck.message);
 
-		return result
+			const itemKey = Object.keys(item);
+			const newDataKey = Object.keys(newData);
+    
+            crud.get()
+                .then( (data) => {
+                    if (data.length == 0 || data.length == 1 || data.length == 2) {
+                        return reject("LocalDB is empty...");
+                    }
+                    getAllData = JSON.parse(data);
+    
+                    const notFound = [];
+                    const dataMap = [];
+                    const match = [];
+                    getAllData.filter(function(getItem) {
+                        if (getItem[itemKey[0]] == undefined) notFound.push("Not found in LocalDB...");
+    
+                        if ( getItem[itemKey[0]] != undefined ) {
+                            if ( getItem[itemKey[0]] == item[itemKey[0]] ) {
+                                match.push(getItem);
+                                getItem[itemKey[0]] = newData[newDataKey[0]];
+                            }
+                        }
+                        dataMap.push(getItem);
+                    })
+    
+                    if (notFound.length != 0  && match.length === 0) return reject(notFound[0]);
+                    if (match.length != 0) {
+                        resolve(localDbChunk.writeFile(dataMap, file));
+                    } else reject("Not found in LocalDB...");
+                } )
+                .catch(error => reject(error));
+        });
 	}
 
 	/**
@@ -107,11 +214,37 @@ const localDB = function() {
 	 * @returns object
 	 */
 	crud.search = async (key, value, unique = true) => {
-		const result = search(key, value, unique)
-			.then(function(data) { return data })
-			.catch(function(error) { return error });
+		return new Promise((resolve, reject) => {
+			if (typeof key != "string") {
+				console.error("Key must be a String type")
+				reject(undefined)
+			}
+			if (typeof value != "string") {
+				console.error("Value must be a String type")
+				reject(undefined)
+			}
+		
+			crud.get()
+				.then( (data) => {
+					if (data.length == 0 || data.length == 1 || data.length == 2) {
+						return reject("LocalDB is empty...");
+					}
+					getAllData = JSON.parse(data);
+					const searchData = []
 
-		return result
+					for (let i = 0; i < getAllData.length; i++) {
+						const item = getAllData[i];
+						
+						if (item[key] != undefined && item[key] === value) {
+							if (unique) resolve(item);
+							searchData.push(item)
+						}
+					}
+				
+					if (searchData.length === 0) reject(undefined);
+					resolve(searchData);
+			});
+		});
 	}
 
 	/**
@@ -123,11 +256,35 @@ const localDB = function() {
 	 * @returns object
 	 */
 	crud.searchByValue = async (value, unique = false) => {
-		const result = await searchByValue(value, unique)
-			.then(function(data) { return data })
-			.catch(function(error) { return error });
+		return new Promise((resolve, reject) => {
+			if (typeof value != "string") {
+				console.error("Value must be a String type")
+				reject(undefined)
+			}
+		
+			crud.get()
+				.then( (data) => {
+					if (data.length == 0 || data.length == 1 || data.length == 2) {
+						return reject("LocalDB is empty...");
+					}
+					getAllData = JSON.parse(data);
+					const dataChunk = []
 
-		return result
+					for (let i = 0; i < getAllData.length; i++) {
+						let data = getAllData[i]
+				
+						for (let item in data) {
+							if (data[item] === value) {
+								if (unique) resolve(data);
+								dataChunk.push(data)
+							}	
+						}
+					}
+					
+					if (dataChunk.length === 0) return undefined
+					resolve(dataChunk);
+			});
+		});
 	}
 
 

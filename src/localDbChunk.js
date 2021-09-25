@@ -2,16 +2,17 @@ const path = require( 'path' );
 const fs = require( 'fs' );
 
 const localDbChunk = {
-	file: path.resolve(path.dirname(__dirname), './localdb.json'),
 
-	getData: () => {
-		const getData = fs.readFileSync( localDbChunk.file, 'utf8' );
-		if (getData.length == 0) return undefined;
-		return getData;
-	},
+	writeFile: async (data, filePath = null) => {
+		const file = filePath == null ? path.resolve(path.dirname(__dirname), './localdb.json') : filePath;
 
-	writeFile: async (data) => {
-		await fs.promises.writeFile(localDbChunk.file, JSON.stringify(data, null, 2));
+        const writeStream = fs.createWriteStream(file);
+        
+        writeStream
+            .on('error', (error) => {
+                console.log(error);
+            })
+            .write(JSON.stringify(data, null, 4));
 	},
 
 	errorCheck: (data) => {
