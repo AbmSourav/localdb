@@ -1,6 +1,6 @@
 {
   "name": "@abmsourav/localdb",
-  "version": "1.4.0",
+  "version": "1.5.1",
   "description": "LocalDB is a NodeJS CRUD api. It uses local file system for CRUD operation.",
   "author": "Keramot UL Islam <keramotul.islam@gmail.com> (https://abmsourav.com)",
   "main": "index.js",

@@ -28,7 +28,15 @@ It uses local file system for CRUD operation. It's a promise based API.
 
 <br>
 
-## Uses
+### Initialization
+Please note: It must be a json file.
+```js
+const ldb = localDB('./db.json');
+```
+
+<br>
+
+## API Uses
 ```js
 const {localDB} = require('@abmsourav/localdb');
 const ldb = localDB();
