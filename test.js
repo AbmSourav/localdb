@@ -1,13 +1,13 @@
 const {localDB} = require("./index");
 // // const {localDbChunk} = require( './src/localDbChunk' );
 
-const ldb = localDB();
+// const ldb = localDB("./db.json");
 
-const data = {name: "Sourav", email: "keramotul.islam@gmail.com"};
+// const data = {name: "Sourav", email: "keramotul.islam@gmail.com"};
 
 // // setTimeout(function() {
-	ldb.set(data)
-		.catch( (err) => console.log(err) );
+	// ldb.set(data)
+	// 	.catch( (err) => console.log(err) );
 // }, 500)
 
 // ldb.get()

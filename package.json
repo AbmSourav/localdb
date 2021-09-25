@@ -1,6 +1,6 @@
 {
   "name": "@abmsourav/localdb",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "description": "LocalDB is a NodeJS CRUD api. It uses local file system for CRUD operation.",
   "author": "Keramot UL Islam <keramotul.islam@gmail.com> (https://abmsourav.com)",
   "main": "index.js",
@@ -9,6 +9,9 @@
     "test": "node test.js"
   },
   "license": "MIT",
+  "keywords": [
+	"localDB", "Database", "promise", "async", "crud"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/AbmSourav/localdb/"

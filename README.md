@@ -28,7 +28,8 @@ It uses local file system for CRUD operation. It's a promise based API.
 
 <br>
 
-### Initialization
+## Initialization
+create a json file on your project root and initialize like below.
 Please note: It must be a json file.
 ```js
 const ldb = localDB('./db.json');
@@ -39,7 +40,7 @@ const ldb = localDB('./db.json');
 ## API Uses
 ```js
 const {localDB} = require('@abmsourav/localdb');
-const ldb = localDB();
+const ldb = localDB('./db.json');
 
 const data = {names: "Sourav", email: "keramotul.islam@gmail.com"};
 

@@ -8,7 +8,7 @@
  * @email <keramotul.islam@gmail.com>
  * @authorUrl https://abmsourav.com
  * @sourceCode https://github.com/AbmSourav/localdb
- * @version 1.5.1
+ * @version 1.5.2
  * 
  * Copyright (c) 2021 Keramot UL Islam
  */
